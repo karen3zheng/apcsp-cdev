@@ -18,6 +18,7 @@ int numStudents = 0;
 // holds the student pointer array
 Student* students[100] = {0};
 
+// Creates a student dynamically
 void createStudent(char* fname, char* lname, int age, int id)
 {
   // createStudent dynamically creates a Student on the heap and adds that
@@ -25,6 +26,7 @@ void createStudent(char* fname, char* lname, int age, int id)
   //  - the firstName and lastName strings should be dynamically created
   //    based on the size of the fname and lname args
   
+  // Creates memory on heap for Student struct and 2 strings for first/last name
   Student* student = (Student*)malloc(sizeof(Student));
   char* firstName = (char*)malloc((strlen(fname) + 1) * sizeof(char));
   char* lastName = (char*)malloc((strlen(lname) + 1) * sizeof(char));
@@ -42,7 +44,7 @@ void createStudent(char* fname, char* lname, int age, int id)
   numStudents++;
 }
 
-
+// Deletes a student and frees the memory
 void deleteStudent(Student* student)
 {
   // free the memory associated with a student including the strings
@@ -51,7 +53,7 @@ void deleteStudent(Student* student)
   free(student->lastName);
 }
 
-
+// Delete students from array and free memory
 void deleteStudents()
 {
   // iterate over the students array deleting every student and setting te pointer
@@ -65,7 +67,7 @@ void deleteStudents()
   }
 }
 
-
+// Save students to file
 void saveStudents(int key, int shiftArr[], int shiftNum, char cipher)
 {
   // save all students in the student array to a file 'studentdata.txt' overwriting
@@ -80,27 +82,32 @@ void saveStudents(int key, int shiftArr[], int shiftNum, char cipher)
   fp = fopen(STUFILE, "w");
   if (fp)
   {
+    // Strings that hold the information to be saved
     char fName[256] = { '\0' };
     char lName[256] = { '\0' };
     char age[256] = { '\0' };
     char id[256] = { '\0' };
+    
     int numSaved = 0;
     
     for (int i = 0; i < numStudents; i++)
     {
+      // Put f/l name in strings
       strcpy(fName, students[i]->firstName);
       strcpy(lName, students[i]->lastName);
+      
+      // Convert age and id and put them in strings
       sprintf(age, "%d", students[i]->age);
       sprintf(id, "%ld", students[i]->id);
         
-      if (cipher == 'c' && key != 0)
+      if (cipher == 'c' && key != 0) /// Encrypt each string with Caesar
       {
         caesarEncrypt(fName, key);
         caesarEncrypt(lName, key);
         caesarEncrypt(age, key);
         caesarEncrypt(id, key);
       }
-      else if (cipher == 'v')
+      else if (cipher == 'v') // Encrypt each string with Vigenere
       {
         encrypt(fName, shiftArr, shiftNum);
         encrypt(lName, shiftArr, shiftNum);
@@ -108,6 +115,7 @@ void saveStudents(int key, int shiftArr[], int shiftNum, char cipher)
         encrypt(id, shiftArr, shiftNum);
       }
     
+      // Write each string to the file
       fprintf(fp, "%s %s %s %s\n", fName, lName, age, id);
       printf("saving: %s %s %s %s\n", fName, lName, age, id);
       
@@ -120,7 +128,7 @@ void saveStudents(int key, int shiftArr[], int shiftNum, char cipher)
   }
 }
 
-
+// Load students from file
 void loadStudents(int key, int shiftArr[], int shiftNum, char cipher)
 {
   // load the students from the data file overwriting all exisiting students in memory
@@ -132,12 +140,15 @@ void loadStudents(int key, int shiftArr[], int shiftNum, char cipher)
   fp = fopen(STUFILE, "r");
   if (fp)
   {
+    // Strings that hold the information to be loaded
     char firstName[256] = { '\0' };
     char lastName[256] = { '\0' };
     char age[256] = { '\0' };
     char id[256] = { '\0' };
+    
     int numLoaded = 0;
     
+    // Variables that will have age and id in the correct data type
     unsigned int ageNum = 0;
     long idNum = 0;
     
@@ -145,14 +156,14 @@ void loadStudents(int key, int shiftArr[], int shiftNum, char cipher)
     {
       if (fscanf(fp, "%s %s %s %s\n", firstName, lastName, age, id) == 4)
       {
-        if (cipher == 'c' && key != 0)
+        if (cipher == 'c' && key != 0) // Decrypt each string with Caesar
         {
           caesarDecrypt(firstName, key);
           caesarDecrypt(lastName, key);
           caesarDecrypt(age, key);
           caesarDecrypt(id, key);
         }
-        else if (cipher == 'v')
+        else if (cipher == 'v') // Decrypt each string with Vigenere
         {
           decrypt(firstName, shiftArr, shiftNum);
           decrypt(lastName, shiftArr, shiftNum);
@@ -160,8 +171,11 @@ void loadStudents(int key, int shiftArr[], int shiftNum, char cipher)
           decrypt(id, shiftArr, shiftNum);
         }
       
+        // Get correct type from age and id strings
         sscanf(age, "%d", &ageNum);
         sscanf(id, "%ld", &idNum);
+        
+        // Create student
         createStudent(firstName, lastName, ageNum, idNum);
         numLoaded++;
       }
@@ -177,7 +191,7 @@ void loadStudents(int key, int shiftArr[], int shiftNum, char cipher)
   }
 }
 
-
+// Print all information from a Student struct
 void printStudent(Student* student)
 {
   printf("  Student: %s %s\n", student->firstName, student->lastName);
@@ -185,7 +199,7 @@ void printStudent(Student* student)
   printf("    id: %ld\n", student->id); 
 }
 
-
+// Go through array of students and print each one
 void printStudents()
 {
   for (int i = 0; i < numStudents; i++) {

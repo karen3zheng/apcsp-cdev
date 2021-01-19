@@ -10,7 +10,7 @@
 char CHARS[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 int CHARS_LEN = 62;
 
-
+// Shifts a character
 char shiftChar(char c, int shift, int direction)
 {
   // implement the character shift here:
@@ -73,7 +73,7 @@ char shiftChar(char c, int shift, int direction)
   }
 }
 
-
+// Encrypts a string using an array of shifts, if all the shifts are the same it is a Caesar cipher
 void encrypt(char str[], int shifts[], int shiftslen)
 {
   for (int i = 0; i < strlen(str); i++) 
@@ -84,7 +84,7 @@ void encrypt(char str[], int shifts[], int shiftslen)
   }
 }
 
-
+// Decrypts a string using an array of shifts by going in the opposite direction, if all the shifts are the same it is a Caesar cipher
 void decrypt(char str[], int shifts[], int shiftslen)
 {
   for (int i = 0; i < strlen(str); i++) 
@@ -96,13 +96,14 @@ void decrypt(char str[], int shifts[], int shiftslen)
 }
 
 
+// Encrypts a string using a Caesar cipher
 void caesarEncrypt(char str[], int shift)
 {
   int shifts[] = { shift };
   encrypt(str, shifts, 1);
 }
 
-
+// Decrypts a string using a Caesar cipher
 void caesarDecrypt(char str[], int shift)
 {
   int shifts[] = { shift };
