@@ -141,8 +141,8 @@ void loadStudents(int key, int shiftArr[], int shiftNum, char cipher)
   if (fp)
   {
     // Strings that hold the information to be loaded
-    char firstName[256] = { '\0' };
-    char lastName[256] = { '\0' };
+    char fName[256] = { '\0' };
+    char lName[256] = { '\0' };
     char age[256] = { '\0' };
     char id[256] = { '\0' };
     
@@ -154,19 +154,19 @@ void loadStudents(int key, int shiftArr[], int shiftNum, char cipher)
     
     while (1)
     {
-      if (fscanf(fp, "%s %s %s %s\n", firstName, lastName, age, id) == 4)
+      if (fscanf(fp, "%s %s %s %s\n", fName, lName, age, id) == 4)
       {
         if (cipher == 'c' && key != 0) // Decrypt each string with Caesar
         {
-          caesarDecrypt(firstName, key);
-          caesarDecrypt(lastName, key);
+          caesarDecrypt(fName, key);
+          caesarDecrypt(lName, key);
           caesarDecrypt(age, key);
           caesarDecrypt(id, key);
         }
         else if (cipher == 'v') // Decrypt each string with Vigenere
         {
-          decrypt(firstName, shiftArr, shiftNum);
-          decrypt(lastName, shiftArr, shiftNum);
+          decrypt(fName, shiftArr, shiftNum);
+          decrypt(lName, shiftArr, shiftNum);
           decrypt(age, shiftArr, shiftNum);
           decrypt(id, shiftArr, shiftNum);
         }
@@ -176,7 +176,7 @@ void loadStudents(int key, int shiftArr[], int shiftNum, char cipher)
         sscanf(id, "%ld", &idNum);
         
         // Create student
-        createStudent(firstName, lastName, ageNum, idNum);
+        createStudent(fName, lName, ageNum, idNum);
         numLoaded++;
       }
       else
