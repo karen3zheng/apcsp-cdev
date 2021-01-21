@@ -40,7 +40,7 @@ int main()
   while (1)
   {
     char c;
-    printf("\nEnter a to add, p to print, l to load, s to save, e encrypt, q to quit: ");
+    printf("\nEnter a to add, p to print, l to load, s to save, e encrypt, v to encrypt with Vigenere, q to quit: ");
     fgets(inputBuff, BUFFSIZE, stdin);
     if (sscanf(inputBuff, "%c", &c) != 1) continue; // Restart the loop if input is not 1 char
     if (c == 'q') // Free memory and quit
@@ -63,48 +63,34 @@ int main()
       saveStudents(key, shiftArr, shiftNum, cipher);
       continue;
     }
-    else if (c == 'e') // Enter encrypt key or shift array
+    else if (c == 'e') // Enter encrypt key
     {
-      while (1)
+      printf("\nEnter an encrypt/decrypt key: ");
+      key = getInputNumber();
+          
+      cipher = 'c';
+    }
+    else if (c == 'v') // Encrypt with Vigenere cipher
+    {
+      while (1) // Ask for input of how many shifts, asks again if over 256
       {
-        printf("\nEnter v to use a Vigenere cipher, enter c to use a Caesar cipher: ");
-        fgets(inputBuff, BUFFSIZE, stdin);
-        if (sscanf(inputBuff, "%c", &c) != 1) continue;
-        
-        if (c == 'v') // If using Vigenere
-        {
-          while (1) // Ask for input of how many shifts, asks again if over 256
-          {
-            printf("\nEnter the number of shifts you want to use: ");
-            shiftNum = getInputNumber();
+        printf("\nEnter the number of shifts you want to use: ");
+        shiftNum = getInputNumber();
             
-            if (shiftNum <= 256)
-              break;
-            else
-              printf("\nPlease enter a number under 256.");
-          }
-          
-          for (int i = 0; i < shiftNum; i++) // Asks for each shift one by one and saves them to array
-          {
-            printf("\nPlease enter shift %d: ", i + 1);
-            
-            shiftArr[i] = getInputNumber();
-          }
-          
-          cipher = 'v';
+        if (shiftNum <= 256)
           break;
-        }
-        else if (c == 'c') // If using Caesar
-        {
-          printf("\nEnter an encrypt/decrypt key: ");
-          
-          key = getInputNumber();
-          
-          cipher = 'c';
-          break;
-          
-        }
+        else
+          printf("\nPlease enter a number under 256.");
       }
+          
+      for (int i = 0; i < shiftNum; i++) // Asks for each shift one by one and saves them to array
+      {
+        printf("\nPlease enter shift %d: ", i + 1);
+            
+        shiftArr[i] = getInputNumber();
+      }
+          
+      cipher = 'v';
     }
     else if (c == 'a')
     {

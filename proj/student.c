@@ -28,14 +28,11 @@ void createStudent(char* fname, char* lname, int age, int id)
   
   // Creates memory on heap for Student struct and 2 strings for first/last name
   Student* student = (Student*)malloc(sizeof(Student));
-  char* firstName = (char*)malloc((strlen(fname) + 1) * sizeof(char));
-  char* lastName = (char*)malloc((strlen(lname) + 1) * sizeof(char));
+  student->firstName = (char*)malloc((strlen(fname) + 1) * sizeof(char));
+  student->lastName = (char*)malloc((strlen(lname) + 1) * sizeof(char));
   
-  strcpy(firstName, fname);
-  strcpy(lastName, lname);
-  
-  student->firstName = firstName;
-  student->lastName = lastName;
+  strcpy(student->firstName, fname);
+  strcpy(student->lastName, lname);
   student->age = age;
   student->id = id;
   
